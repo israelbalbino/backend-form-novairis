@@ -1,29 +1,32 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const creds = require(`${process.env.CREDS}`); // substitua pelo nome correto do JSON
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const SHEET_ID = process.env.SHEET_ID; // copie o ID da URL da sua planilha
+const SHEET_ID = '1BE3iGg6DkNEhnR9wlPDJX27n-sxLt8qswqtcaJGL_Pk';
 
 app.post('/enviar', async (req, res) => {
-  const { name, email, phone } = req.body;
+  const { nome, email, celular } = req.body;
 
-  if (!name || !email || !phone) {
+  if (!nome || !email || !celular) {
     return res.status(400).send('Todos os campos são obrigatórios.');
   }
 
   try {
     const doc = new GoogleSpreadsheet(SHEET_ID);
-    await doc.useServiceAccountAuth(creds);
+    await doc.useServiceAccountAuth({
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    });
+
     await doc.loadInfo();
+    const sheet = doc.sheetsByIndex[0];
 
-    const sheet = doc.sheetsByIndex[0]; // primeira aba da planilha
-
-    await sheet.addRow({ Nome: name, Email: email, Celular: phone });
+    await sheet.addRow({ Nome: nome, Email: email, Celular: celular });
 
     res.redirect('https://istechsolucoesdigitais.online/vcl2/');
   } catch (error) {
