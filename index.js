@@ -10,9 +10,9 @@ app.use(bodyParser.json());
 const SHEET_ID = '1BE3iGg6DkNEhnR9wlPDJX27n-sxLt8qswqtcaJGL_Pk';
 
 app.post('/enviar', async (req, res) => {
-  const { nome, email, celular } = req.body;
+  const { name, email, phone } = req.body;
 
-  if (!nome || !email || !celular) {
+  if (!name || !email || !phone) {
     return res.status(400).send('Todos os campos são obrigatórios.');
   }
 
@@ -26,7 +26,7 @@ app.post('/enviar', async (req, res) => {
     await doc.loadInfo();
     const sheet = doc.sheetsByIndex[0];
 
-    await sheet.addRow({ Nome: nome, Email: email, Celular: celular });
+    await sheet.addRow({ Nome: name, Email: email, Celular: phone });
 
     res.redirect('https://istechsolucoesdigitais.online/vcl2/');
   } catch (error) {
