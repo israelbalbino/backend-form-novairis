@@ -1,13 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const creds = require('./formulario-460100-4c0ede1724a0.json'); // substitua pelo nome correto do JSON
+const creds = require(`${process.env.CREDS}`); // substitua pelo nome correto do JSON
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const SHEET_ID = '1BE3iGg6DkNEhnR9wlPDJX27n-sxLt8qswqtcaJGL_Pk'; // copie o ID da URL da sua planilha
+const SHEET_ID = process.env.SHEET_ID; // copie o ID da URL da sua planilha
 
 app.post('/enviar', async (req, res) => {
   const { name, email, phone } = req.body;
