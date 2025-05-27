@@ -40,7 +40,7 @@ app.post('/enviar', async (req, res) => {
     });
 
     // Redireciona após sucesso
-    res.redirect('https://istechsolucoesdigitais.online/vcl2/');
+    res.redirect('https://novarisia.online/vcl2/');
   } catch (error) {
     console.error('Erro ao gravar na planilha:', error);
     res.status(500).send('Erro ao gravar na planilha.');
